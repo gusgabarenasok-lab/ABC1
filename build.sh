@@ -9,7 +9,10 @@ pip install -r requirements.txt
 echo "[BUILD] Recolectando archivos estaticos..."
 python manage.py collectstatic --noinput
 
-echo "[BUILD] Aplicando migraciones existentes..."
+echo "[BUILD] Generando migraciones pendientes..."
+python manage.py makemigrations --noinput
+
+echo "[BUILD] Aplicando todas las migraciones..."
 python manage.py migrate --noinput
 
 echo "[BUILD] Creando superusuario si no existe..."
