@@ -18,6 +18,10 @@ class RunSQL(Operation):
         # No necesitamos rollback para desarrollo
         pass
 
+    def state_forwards(self, app_label, state):
+        # No necesitamos cambiar el estado ya que estamos creando tablas directamente
+        pass
+
     def describe(self):
         return f"Run SQL: {self.sql[:50]}..."
 
