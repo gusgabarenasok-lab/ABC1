@@ -9,8 +9,8 @@ pip install -r requirements.txt
 echo "[BUILD] Recolectando archivos estaticos..."
 python manage.py collectstatic --noinput
 
-echo "[BUILD] Ejecutando migraciones..."
-python manage.py migrate --noinput
+echo "[BUILD] Sincronizando base de datos (creando todas las tablas)..."
+python manage.py migrate --run-syncdb --noinput
 
 echo "[BUILD] Creando superusuario si no existe..."
 python manage.py create_superuser_if_none
