@@ -35,6 +35,14 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'Perfil'
+    fk_name = 'user'
+    fields = ['legajo', 'area', 'turno_habitual', 'telefono', 'fecha_ingreso', 'activo', 'foto_perfil']
+    
+    def get_extra(self, request, obj=None, **kwargs):
+        """Si el usuario no tiene perfil, mostrar el formulario para crearlo"""
+        if obj and not hasattr(obj, 'profile'):
+            return 1
+        return 0
 
 
 class UserAdmin(BaseUserAdmin):

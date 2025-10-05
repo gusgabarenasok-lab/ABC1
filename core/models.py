@@ -34,9 +34,9 @@ class UserProfile(models.Model):
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    legajo = models.CharField(max_length=20, unique=True, verbose_name="Legajo")
-    area = models.CharField(max_length=20, choices=AREA_CHOICES)
-    turno_habitual = models.CharField(max_length=1, choices=TURNO_CHOICES)
+    legajo = models.CharField(max_length=20, unique=True, verbose_name="Legajo", null=True, blank=True)
+    area = models.CharField(max_length=20, choices=AREA_CHOICES, null=True, blank=True)
+    turno_habitual = models.CharField(max_length=1, choices=TURNO_CHOICES, null=True, blank=True)
     telefono = models.CharField(max_length=20, blank=True)
     fecha_ingreso = models.DateField(null=True, blank=True)
     activo = models.BooleanField(default=True)
