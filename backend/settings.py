@@ -23,15 +23,15 @@ else:
     env_path = BASE_DIR / ".env.dev"
 
 load_dotenv(env_path)
-print(f"📦 Entorno: {ENVIRONMENT}")
-print(f"📂 Archivo .env: {env_path}")
+print(f"[*] Entorno: {ENVIRONMENT}")
+print(f"[*] Archivo .env: {env_path}")
 
 # ============================================
 # SECURITY SETTINGS
 # ============================================
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
-    raise ValueError("❌ SECRET_KEY no está configurada en las variables de entorno")
+    raise ValueError("[ERROR] SECRET_KEY no está configurada en las variables de entorno")
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
@@ -175,7 +175,7 @@ if IS_PRODUCTION:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     
-    print("🔒 Configuración de seguridad para PRODUCCIÓN activada")
+    print("[*] Configuracion de seguridad para PRODUCCION activada")
 else:
     # Desarrollo: cookies sin HTTPS
     SESSION_COOKIE_SECURE = False
@@ -183,7 +183,7 @@ else:
     SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 0
     
-    print("🔓 Configuración de seguridad para DESARROLLO")
+    print("[*] Configuracion de seguridad para DESARROLLO")
 
 # ============================================
 # LOGGING CONFIGURATION
@@ -299,4 +299,4 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
 }
 
-print("✅ Configuración cargada correctamente")
+print("[OK] Configuracion cargada correctamente")
