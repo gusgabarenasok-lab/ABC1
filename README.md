@@ -28,7 +28,7 @@ Plataforma web integral para la gestión operativa de la planta farmacéutica de
 - [x] API REST con validaciones robustas
 - [x] Filtros y búsqueda avanzada
 - [x] Endpoints personalizados (resumen del día, producciones en proceso)
-- [x] Deploy configurado para Railway
+- [x] Deploy configurado para Render
 - [x] PostgreSQL como base de datos
 - [x] Logging con rotación de archivos
 - [x] Middleware de manejo de errores global
@@ -51,7 +51,7 @@ Plataforma web integral para la gestión operativa de la planta farmacéutica de
 - **Base de Datos:** PostgreSQL
 - **Autenticación:** JWT (djangorestframework-simplejwt)
 - **Servidor:** Gunicorn
-- **Deploy:** Railway + Nixpacks
+- **Deploy:** Render (Gratuito)
 
 ### Frontend (Planificado)
 - **Framework:** Next.js 14 (React)
@@ -89,13 +89,64 @@ ABC1/
 ├── requirements.txt      # Dependencias Python
 ├── runtime.txt           # Versión de Python
 ├── Procfile              # Comando para Gunicorn
-├── nixpacks.toml         # Config de build para Railway
+├── nixpacks.toml         # Config de build para Render
 │
+├── create_admin.py       # Script para crear usuario admin
 ├── README.md             # Este archivo
 ├── API_DOCUMENTATION.md  # Documentación completa de la API
 ├── DEPLOY_RAILWAY.md     # Guía de deploy paso a paso
 └── ENV_TEMPLATE.md       # Template de variables de entorno
 ```
+
+---
+
+## 🚀 **PRUEBA RÁPIDA DE LA API**
+
+### 1. **Crear Usuario Admin**
+El usuario admin se crea automáticamente en el primer deploy. Usa estos datos:
+
+- **Usuario:** `admin`
+- **Email:** `admin@siprosa.com.ar`  
+- **Contraseña:** `Admin123456` ⚠️ **Cambia esto inmediatamente**
+
+### 2. **Obtener Token JWT**
+
+```bash
+curl -X POST https://abc1-qifd.onrender.com/api/token/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "Admin123456"
+  }'
+```
+
+### 3. **Probar API con Token**
+
+```bash
+# Listar máquinas
+curl https://abc1-qifd.onrender.com/api/maquinas/ \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
+
+# Crear una producción (ejemplo)
+curl -X POST https://abc1-qifd.onrender.com/api/producciones/ \
+  -H "Authorization: Bearer TU_TOKEN_AQUI" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "maquina": 1,
+    "codigo_lote": "LOTE-TEST-001",
+    "producto": "Ibuprofeno 400mg",
+    "cantidad_producida": 1000,
+    "turno": "M"
+  }'
+```
+
+---
+
+## 📚 Documentación Completa
+
+- **`API_DOCUMENTATION.md`** - Todos los endpoints y ejemplos
+- **`DEPLOY_RAILWAY.md`** - Guía de deploy paso a paso  
+- **`ENV_TEMPLATE.md`** - Variables de entorno necesarias
 
 ---
 
@@ -134,7 +185,7 @@ pip install -r requirements.txt
 
 ### 4. Configurar variables de entorno
 
-Crea un archivo `.env.dev` en la raíz (usa `ENV_TEMPLATE.md` como guía):
+Crea un archivo `.env.dev` en la raíz:
 
 ```bash
 ENVIRONMENT=development
@@ -186,42 +237,11 @@ Accede a:
 
 ---
 
-## 🚂 Deploy en Railway
+## 🚂 Deploy en Render
 
-Sigue la guía detallada en [`DEPLOY_RAILWAY.md`](./DEPLOY_RAILWAY.md)
+✅ **Ya configurado y funcionando**
 
-**Resumen:**
-1. Conectar repositorio GitHub a Railway
-2. Agregar servicio PostgreSQL
-3. Configurar variables de entorno
-4. Push a `main` → Deploy automático
-
----
-
-## 📚 Documentación de la API
-
-Ver documentación completa en [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md)
-
-### Endpoints Principales
-
-```
-POST   /api/token/                    # Obtener JWT token
-POST   /api/token/refresh/            # Refrescar token
-GET    /api/health/                   # Health check
-
-GET    /api/maquinas/                 # Listar máquinas
-POST   /api/maquinas/                 # Crear máquina
-GET    /api/maquinas/{id}/            # Detalle de máquina
-PATCH  /api/maquinas/{id}/            # Actualizar máquina
-DELETE /api/maquinas/{id}/            # Eliminar máquina
-
-GET    /api/producciones/             # Listar producciones
-POST   /api/producciones/             # Crear producción
-GET    /api/producciones/{id}/        # Detalle de producción
-PATCH  /api/producciones/{id}/        # Actualizar producción
-GET    /api/producciones/en_proceso/  # Solo en proceso
-GET    /api/producciones/resumen_hoy/ # Resumen del día
-```
+**URL del Backend:** https://abc1-qifd.onrender.com
 
 ---
 
@@ -237,25 +257,12 @@ GET    /api/producciones/resumen_hoy/ # Resumen del día
 
 ---
 
-## 🧪 Testing
-
-```bash
-# Ejecutar tests (cuando estén implementados)
-python manage.py test
-
-# Con coverage
-coverage run --source='.' manage.py test
-coverage report
-```
-
----
-
 ## 📊 Roadmap
 
 ### Fase 1: Base Sólida ✅ (Actual)
 - [x] Backend Django con autenticación
 - [x] Modelos básicos (Máquina, Producción)
-- [x] Deploy en Railway
+- [x] Deploy en Render
 
 ### Fase 2: Producción Completa (En progreso)
 - [ ] Frontend Next.js
@@ -343,11 +350,10 @@ Este proyecto es de uso interno para SIPROSA.
 
 - Equipo de SIPROSA por la confianza en el proyecto
 - Comunidad Django y DRF por el excelente framework
-- Railway por facilitar el deploy
+- Render por facilitar el deploy gratuito
 
 ---
 
 **Versión:** 0.1.0-MVP  
 **Última actualización:** Octubre 2025  
 **Status:** 🟢 En desarrollo activo
-
