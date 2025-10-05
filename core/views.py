@@ -4,7 +4,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Count, Q
 from django.utils import timezone
-from datetime import timedelta
+from django.http import JsonResponse
+from django.conf import settings
+from django.db import connections
+from django.db.utils import OperationalError
+from datetime import datetime, timedelta
+import django
 
 from .models import Maquina, Produccion
 from .serializers import (
