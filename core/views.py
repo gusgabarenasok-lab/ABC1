@@ -667,8 +667,16 @@ class IncidenteViewSet(viewsets.ModelViewSet):
 
 
 # ============================================
-# HEALTH CHECK
+# HOME & HEALTH CHECK
 # ============================================
+
+def home(request):
+    """
+    Página de bienvenida - redirige al panel de administración
+    """
+    from django.shortcuts import redirect
+    return redirect('/admin/')
+
 
 def health_check(request):
     """
