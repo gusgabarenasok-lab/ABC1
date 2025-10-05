@@ -1,0 +1,106 @@
+[2025-10-04 17:06:17,297] INFO core - 💡 Prueba de logging OK
+[2025-10-04 17:09:35,962] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:09:45,241] WARNING django.request - Not Found: /esto-no-existe
+[2025-10-04 17:09:45,242] WARNING django.server - "GET /esto-no-existe HTTP/1.1" 404 2727
+[2025-10-04 17:11:34,170] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:11:37,426] WARNING django.request - Not Found: /esto-no-existe
+[2025-10-04 17:11:37,427] WARNING django.server - "GET /esto-no-existe HTTP/1.1" 404 179
+[2025-10-04 17:11:44,304] WARNING django.request - Not Found: /esto-no-existe
+[2025-10-04 17:11:44,306] WARNING django.server - "GET /esto-no-existe HTTP/1.1" 404 179
+[2025-10-04 17:13:46,146] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:13:49,975] WARNING django.request - Not Found: /esto-no-existe
+[2025-10-04 17:13:49,976] WARNING django.server - "GET /esto-no-existe HTTP/1.1" 404 2727
+[2025-10-04 17:14:45,617] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/core/views.py changed, reloading.
+[2025-10-04 17:14:49,154] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:15:06,697] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/core/views.py changed, reloading.
+[2025-10-04 17:15:10,315] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:17:09,192] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/backend/urls.py changed, reloading.
+[2025-10-04 17:17:13,694] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:17:31,762] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/backend/urls.py changed, reloading.
+[2025-10-04 17:17:34,647] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:17:53,069] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:17:57,358] INFO django.server - "GET /api/health/ HTTP/1.1" 200 49
+[2025-10-04 17:20:02,611] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/core/views.py changed, reloading.
+[2025-10-04 17:20:05,123] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:20:15,027] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/core/views.py changed, reloading.
+[2025-10-04 17:20:19,195] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:20:33,977] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/core/views.py changed, reloading.
+[2025-10-04 17:20:37,514] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:21:14,401] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/backend/urls.py changed, reloading.
+[2025-10-04 17:21:18,979] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:21:30,634] INFO django.utils.autoreload - /mnt/c/Users/Gabi/Proyectos/SIPROSA/backend/urls.py changed, reloading.
+[2025-10-04 17:21:34,260] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:21:48,885] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:21:52,730] INFO django.server - "GET /api/health/ HTTP/1.1" 200 144
+[2025-10-04 17:27:24,786] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:37:35,422] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:37:36,801] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:36,803] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:42,460] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:42,461] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:43,144] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:43,146] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:43,552] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:43,554] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:43,696] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:43,698] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:43,867] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:43,868] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:44,025] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:44,027] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:44,175] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:44,177] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:44,329] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:44,331] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:44,472] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:44,475] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:44,615] WARNING django.request - Not Found: /health
+[2025-10-04 17:37:44,618] WARNING django.server - "GET /health HTTP/1.1" 404 2857
+[2025-10-04 17:37:53,087] INFO django.server - "GET /api/health/ HTTP/1.1" 200 144
+[2025-10-04 17:43:18,316] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-04 17:43:23,518] INFO django.server - "GET /admin/ HTTP/1.1" 302 0
+[2025-10-04 17:43:23,639] INFO django.server - "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4178
+[2025-10-04 17:43:25,991] INFO django.server - "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4349
+[2025-10-04 17:43:30,552] INFO django.server - "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[2025-10-04 17:43:30,609] INFO django.server - "GET /admin/ HTTP/1.1" 200 7747
+[2025-10-04 17:43:30,635] INFO django.server - "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+[2025-10-04 17:43:30,637] INFO django.server - "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:30,639] INFO django.server - "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:33,166] INFO django.server - "GET /admin/auth/group/ HTTP/1.1" 200 9037
+[2025-10-04 17:43:33,202] INFO django.server - "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,209] INFO django.server - "GET /static/admin/js/core.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,212] INFO django.server - "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+[2025-10-04 17:43:33,214] INFO django.server - "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,218] INFO django.server - "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,218] INFO django.server - "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,223] INFO django.server - "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,224] INFO django.server - "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,233] INFO django.server - "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,238] INFO django.server - "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:33,270] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:33,288] INFO django.server - "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+[2025-10-04 17:43:33,305] INFO django.server - "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:34,673] INFO django.server - "GET /admin/auth/user/ HTTP/1.1" 200 12600
+[2025-10-04 17:43:34,710] INFO django.server - "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:34,736] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:34,805] INFO django.server - "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:34,814] INFO django.server - "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:36,053] INFO django.server - "GET /admin/core/maquina/ HTTP/1.1" 200 9694
+[2025-10-04 17:43:36,122] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:36,820] INFO django.server - "GET /admin/core/produccion/ HTTP/1.1" 200 10216
+[2025-10-04 17:43:36,878] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:37,488] INFO django.server - "GET /admin/auth/user/ HTTP/1.1" 200 12600
+[2025-10-04 17:43:37,550] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:38,443] INFO django.server - "GET /admin/auth/user/1/change/ HTTP/1.1" 200 23287
+[2025-10-04 17:43:38,477] INFO django.server - "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,477] INFO django.server - "GET /static/admin/js/SelectBox.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,477] INFO django.server - "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,485] INFO django.server - "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+[2025-10-04 17:43:38,491] INFO django.server - "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,497] INFO django.server - "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,500] INFO django.server - "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+[2025-10-04 17:43:38,512] INFO django.server - "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+[2025-10-04 17:43:38,518] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-10-04 17:43:38,570] INFO django.server - "GET /static/admin/img/selector-icons.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:38,570] INFO django.server - "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+[2025-10-04 17:43:38,573] INFO django.server - "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
