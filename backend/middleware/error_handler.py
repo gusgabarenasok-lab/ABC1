@@ -18,18 +18,18 @@ class GlobalErrorMiddleware:
         try:
             return self.get_response(request)
         except Exception as e:
-            logger.exception(f"🔥 Excepción capturada: {str(e)}")
+            logger.exception("Excepcion capturada: %s", e)
 
             if settings.DEBUG:
-                # En modo desarrollo mostramos más información
+                # En modo desarrollo mostramos mas informacion
                 return JsonResponse({
                     "error": str(e),
                     "type": e.__class__.__name__,
                     "trace": traceback.format_exc().splitlines(),
                 }, status=500)
             else:
-                # En modo producción devolvemos un mensaje genérico
+                # En modo produccion devolvemos un mensaje generico
                 return JsonResponse({
-                    "error": "Ocurrió un error interno. El incidente fue registrado.",
+                    "error": "Ocurrio un error interno. El incidente fue registrado.",
                 }, status=500)
 

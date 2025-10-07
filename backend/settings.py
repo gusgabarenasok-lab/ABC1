@@ -22,9 +22,15 @@ if IS_PRODUCTION:
 else:
     env_path = BASE_DIR / ".env.dev"
 
-load_dotenv(env_path)
-print(f"[*] Entorno: {ENVIRONMENT}")
-print(f"[*] Archivo .env: {env_path}")
+if env_path.exists():
+    load_dotenv(env_path)
+    print(f"[*] Entorno: {ENVIRONMENT}")
+    print(f"[*] Archivo .env cargado: {env_path}")
+else:
+    print(f"[!] ADVERTENCIA: Archivo {env_path} no existe")
+    print(f"[!] Intente primero ejecutar: python setup_dev.py")
+    # Intentar cargar variables de entorno del sistema
+    load_dotenv()
 
 # ============================================
 # SECURITY SETTINGS
@@ -34,7 +40,11 @@ if not SECRET_KEY:
     raise ValueError("[ERROR] SECRET_KEY no está configurada en las variables de entorno")
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if host.strip()
+]
 
 # ============================================
 # APPLICATION DEFINITION
@@ -47,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'core',
 ]
@@ -86,16 +97,28 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # ============================================
 # DATABASE
 # ============================================
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+# Usar SQLite si no hay configuración de PostgreSQL (desarrollo local)
+if os.getenv('DB_HOST') and os.getenv('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
     }
-}
+    print("[*] Usando PostgreSQL")
+else:
+    # Fallback a SQLite para desarrollo sin PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("[*] Usando SQLite (desarrollo local)")
 
 # ============================================
 # PASSWORD VALIDATION
@@ -152,6 +175,23 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Configuración adicional de CORS para desarrollo
+if DEBUG:
+    # Permitir todos los orígenes en desarrollo (solo para facilitar pruebas)
+    # NOTA: En producción, CORS_ALLOWED_ORIGINS debe estar estrictamente configurado
+    CORS_ALLOW_ALL_ORIGINS = False  # Mantener False por seguridad
+    CORS_ALLOW_HEADERS = [
+        'accept',
+        'accept-encoding',
+        'authorization',
+        'content-type',
+        'dnt',
+        'origin',
+        'user-agent',
+        'x-csrftoken',
+        'x-requested-with',
+    ]
 
 # ============================================
 # SECURITY HEADERS (Base)
@@ -243,7 +283,7 @@ REST_FRAMEWORK = {
     # Autenticación
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # SessionAuthentication removido - solo usamos JWT (sin CSRF)
     ),
     
     # Permisos

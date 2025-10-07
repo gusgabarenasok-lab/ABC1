@@ -100,44 +100,92 @@ ABC1/
 
 ---
 
-## 🚀 **PRUEBA RÁPIDA DE LA API**
+## 🚀 **INICIO RÁPIDO - SISTEMA COMPLETO**
 
-### 1. **Crear Usuario Admin**
-El usuario admin se crea automáticamente en el primer deploy. Usa estos datos:
+### ⚡ Setup Automático en 1 Comando (RECOMENDADO)
 
-- **Usuario:** `admin`
-- **Email:** `admin@siprosa.com.ar`  
-- **Contraseña:** `Admin123456` ⚠️ **Cambia esto inmediatamente**
+#### Con Docker:
+```powershell
+# PowerShell (Windows)
+.\setup_system.ps1
 
-### 2. **Obtener Token JWT**
+# O con CMD
+setup_system.bat
+```
+
+#### Sin Docker (Python local):
+```powershell
+# PowerShell (Windows)
+.\setup_system_local.ps1
+
+# O directamente con Python
+python setup_and_verify.py
+```
+
+**Esto hace TODO automáticamente:**
+- ✅ Aplica migraciones de base de datos
+- ✅ Carga datos de prueba realistas (usuarios, lotes, máquinas, etc.)
+- ✅ Verifica que todo funcione correctamente
+
+### 🌐 Acceder al Sistema
+
+Una vez completado el setup:
+
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:8000/api/
+- **Django Admin:** http://localhost:8000/admin/
+
+### 👥 **Credenciales de Prueba (ACTUALIZADAS)**
+
+| Usuario | Contraseña | Rol |
+|---------|-----------|-----|
+| `admin` | `sandz334@` | Administrador completo |
+| `operario1` | `sandz334@` | Operario de producción |
+| `supervisor1` | `sandz334@` | Supervisor de producción |
+| `calidad1` | `sandz334@` | Quality Assurance (QA) |
+| `mantenimiento1` | `sandz334@` | Técnico de mantenimiento |
+
+### 📊 Datos Incluidos
+
+El sistema viene pre-cargado con datos realistas:
+- ✅ 5 usuarios con roles diferentes
+- ✅ 5 máquinas de producción
+- ✅ 5 productos farmacéuticos  
+- ✅ 7 lotes en diferentes estados
+- ✅ 6 órdenes de trabajo de mantenimiento
+- ✅ 5 incidentes con severidades
+- ✅ Notificaciones y alertas
+
+### 🎯 Verificación Rápida
+
+1. Abre http://localhost:3000
+2. Login con `admin` / `sandz334@`
+3. Verifica que veas:
+   - Dashboard con KPIs reales
+   - 7 lotes en el módulo "Lotes"
+   - 6 órdenes en "Mantenimiento"
+   - 5 incidentes en "Incidentes"
+
+### 📚 Más Información
+
+- **Guía detallada:** Ver `INICIO_RAPIDO.md`
+- **Testing exhaustivo:** Ver `TESTING_AND_DEPLOYMENT.md`
+- **Documentación técnica:** Ver `IMPLEMENTATION_SUMMARY.md`
+
+### **Probar la API**
 
 ```bash
-curl -X POST https://abc1-qifd.onrender.com/api/token/ \
+# Obtener token JWT
+curl -X POST http://localhost:8000/api/token/ \
   -H "Content-Type: application/json" \
   -d '{
     "username": "admin",
     "password": "Admin123456"
   }'
-```
 
-### 3. **Probar API con Token**
-
-```bash
-# Listar máquinas
-curl https://abc1-qifd.onrender.com/api/maquinas/ \
+# Probar API con token
+curl http://localhost:8000/api/maquinas/ \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
-
-# Crear una producción (ejemplo)
-curl -X POST https://abc1-qifd.onrender.com/api/producciones/ \
-  -H "Authorization: Bearer TU_TOKEN_AQUI" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "maquina": 1,
-    "codigo_lote": "LOTE-TEST-001",
-    "producto": "Ibuprofeno 400mg",
-    "cantidad_producida": 1000,
-    "turno": "M"
-  }'
 ```
 
 ---

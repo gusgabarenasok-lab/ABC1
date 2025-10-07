@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: siprosa_mes_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=True
+      - DB_NAME=siprosa_mes
+      - DB_USER=siprosa_user
+      - DB_PASSWORD=siprosa_pass_123
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SECRET_KEY=django-insecure-dev-key-change-in-production-123456789
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+      - CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://localhost:5173
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - siprosa_network
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: siprosa_mes_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: siprosa_mes
+      POSTGRES_USER: siprosa_user
+      POSTGRES_PASSWORD: siprosa_pass_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U siprosa_user -d siprosa_mes"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - siprosa_network
+
+volumes:
+  postgres_data:
+
+networks:
+  siprosa_network:
+    driver: bridge
+

@@ -281,6 +281,7 @@ class Lote(models.Model):
         ('EN_PROCESO', 'En Proceso'),
         ('PAUSADO', 'Pausado'),
         ('FINALIZADO', 'Finalizado'),
+        ('CANCELADO', 'Cancelado'),
         ('RECHAZADO', 'Rechazado'),
         ('LIBERADO', 'Liberado'),
     ]
@@ -310,6 +311,10 @@ class Lote(models.Model):
     observaciones = models.TextField(blank=True)
     creado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='lotes_creados')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    cancelado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='lotes_cancelados')
+    fecha_cancelacion = models.DateTimeField(null=True, blank=True)
+    motivo_cancelacion = models.TextField(blank=True, verbose_name="Motivo de cancelación")
+    visible = models.BooleanField(default=True, verbose_name="Visible en listado")
     
     class Meta:
         verbose_name = "Lote de Producción"
@@ -459,8 +464,8 @@ class LoteDocumento(models.Model):
     tipo_documento = models.ForeignKey(TipoDocumento, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=200)
     archivo_url = models.CharField(max_length=500)
-    hash_sha256 = models.CharField(max_length=64, editable=False)
-    tamaño_bytes = models.BigIntegerField(editable=False)
+    hash_sha256 = models.CharField(max_length=64, editable=False, blank=True)
+    tamaño_bytes = models.BigIntegerField(editable=False, default=0)
     subido_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='documentos_subidos')
     fecha_subida = models.DateTimeField(auto_now_add=True)
     
@@ -471,6 +476,99 @@ class LoteDocumento(models.Model):
     
     def __str__(self):
         return f"{self.nombre} - {self.lote.codigo_lote}"
+
+
+class Desviacion(models.Model):
+    """Desviaciones del proceso (Deviations)"""
+    
+    SEVERIDAD_CHOICES = [
+        ('CRITICA', 'Crítica'),
+        ('MAYOR', 'Mayor'),
+        ('MENOR', 'Menor'),
+    ]
+    
+    ESTADO_CHOICES = [
+        ('ABIERTA', 'Abierta'),
+        ('EN_INVESTIGACION', 'En Investigación'),
+        ('EN_CAPA', 'En CAPA'),
+        ('CERRADA', 'Cerrada'),
+    ]
+    
+    codigo = models.CharField(max_length=30, unique=True, verbose_name="Código")
+    lote = models.ForeignKey(Lote, on_delete=models.PROTECT, null=True, blank=True, related_name='desviaciones')
+    lote_etapa = models.ForeignKey(LoteEtapa, on_delete=models.PROTECT, null=True, blank=True, related_name='desviaciones')
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField()
+    severidad = models.CharField(max_length=10, choices=SEVERIDAD_CHOICES)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='ABIERTA')
+    fecha_deteccion = models.DateTimeField()
+    detectado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='desviaciones_detectadas')
+    area_responsable = models.CharField(max_length=50, blank=True)
+    impacto_calidad = models.TextField(blank=True)
+    impacto_seguridad = models.TextField(blank=True)
+    impacto_eficacia = models.TextField(blank=True)
+    investigacion_realizada = models.TextField(blank=True)
+    causa_raiz = models.TextField(blank=True)
+    accion_inmediata = models.TextField(blank=True)
+    requiere_capa = models.BooleanField(default=False)
+    fecha_cierre = models.DateTimeField(null=True, blank=True)
+    cerrado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='desviaciones_cerradas')
+    
+    class Meta:
+        verbose_name = "Desviación"
+        verbose_name_plural = "Desviaciones"
+        ordering = ['-fecha_deteccion']
+    
+    def __str__(self):
+        return f"{self.codigo} - {self.titulo}"
+
+
+class DocumentoVersionado(models.Model):
+    """Sistema de documentos versionados (SOPs, procedimientos, etc.)"""
+    
+    TIPO_CHOICES = [
+        ('SOP', 'Standard Operating Procedure'),
+        ('IT', 'Instrucción de Trabajo'),
+        ('FT', 'Ficha Técnica'),
+        ('PL', 'Protocolo'),
+        ('REG', 'Registro'),
+    ]
+    
+    ESTADO_CHOICES = [
+        ('BORRADOR', 'Borrador'),
+        ('EN_REVISION', 'En Revisión'),
+        ('APROBADO', 'Aprobado'),
+        ('VIGENTE', 'Vigente'),
+        ('OBSOLETO', 'Obsoleto'),
+    ]
+    
+    codigo = models.CharField(max_length=50, verbose_name="Código")
+    titulo = models.CharField(max_length=200)
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
+    version = models.CharField(max_length=20)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='BORRADOR')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    creado_por = models.ForeignKey(User, on_delete=models.PROTECT, related_name='documentos_creados')
+    fecha_revision = models.DateTimeField(null=True, blank=True)
+    revisado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='documentos_revisados')
+    fecha_aprobacion = models.DateTimeField(null=True, blank=True)
+    aprobado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='documentos_aprobados')
+    fecha_vigencia_inicio = models.DateField(null=True, blank=True)
+    fecha_vigencia_fin = models.DateField(null=True, blank=True)
+    contenido = models.TextField(blank=True, help_text="Contenido del documento o referencia")
+    archivo_url = models.CharField(max_length=500, blank=True)
+    hash_sha256 = models.CharField(max_length=64, blank=True)
+    cambios_version = models.TextField(blank=True, help_text="Resumen de cambios en esta versión")
+    documento_anterior = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='versiones_siguientes')
+    
+    class Meta:
+        verbose_name = "Documento Versionado"
+        verbose_name_plural = "Documentos Versionados"
+        ordering = ['-fecha_creacion']
+        unique_together = ['codigo', 'version']
+    
+    def __str__(self):
+        return f"{self.codigo} - {self.titulo} (v{self.version})"
 
 
 # ============================================
@@ -1138,6 +1236,7 @@ class LogAuditoria(models.Model):
         ('CREAR', 'Crear'),
         ('MODIFICAR', 'Modificar'),
         ('ELIMINAR', 'Eliminar'),
+        ('CANCELAR', 'Cancelar'),
         ('VER', 'Ver'),
         ('EXPORTAR', 'Exportar'),
     ]
@@ -1195,3 +1294,194 @@ class Notificacion(models.Model):
     
     def __str__(self):
         return f"{self.usuario.username} - {self.titulo}"
+
+
+# ============================================
+# 8. MÓDULO: FIRMAS ELECTRÓNICAS
+# ============================================
+
+class ElectronicSignature(models.Model):
+    """
+    Electronic Signature Record
+    Implements requirements for 21 CFR Part 11
+    """
+    
+    ACTION_CHOICES = [
+        ('APPROVE', 'Approve'),
+        ('REVIEW', 'Review'),
+        ('RELEASE', 'Release'),
+        ('REJECT', 'Reject'),
+        ('AUTHORIZE', 'Authorize'),
+        ('VERIFY', 'Verify'),
+    ]
+    
+    MEANING_CHOICES = [
+        ('APPROVED_BY', 'Approved by'),
+        ('REVIEWED_BY', 'Reviewed by'),
+        ('RELEASED_BY', 'Released by'),
+        ('REJECTED_BY', 'Rejected by'),
+        ('AUTHORIZED_BY', 'Authorized by'),
+        ('VERIFIED_BY', 'Verified by'),
+    ]
+    
+    # Signature Details
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='electronic_signatures',
+        help_text="User who signed"
+    )
+    action = models.CharField(
+        max_length=20,
+        choices=ACTION_CHOICES,
+        help_text="Action being signed"
+    )
+    meaning = models.CharField(
+        max_length=20,
+        choices=MEANING_CHOICES,
+        help_text="Meaning of the signature"
+    )
+    timestamp = models.DateTimeField(
+        auto_now_add=True,
+        help_text="When the signature was applied"
+    )
+    
+    # What is being signed
+    content_type = models.CharField(
+        max_length=100,
+        help_text="Type of object being signed (e.g., 'Lote', 'OrdenTrabajo')"
+    )
+    object_id = models.IntegerField(
+        help_text="ID of the object being signed"
+    )
+    object_str = models.CharField(
+        max_length=200,
+        help_text="String representation of the object"
+    )
+    
+    # Reason and Comments
+    reason = models.TextField(
+        help_text="Reason for signing (required by 21 CFR Part 11)"
+    )
+    comments = models.TextField(
+        blank=True,
+        help_text="Additional comments"
+    )
+    
+    # Authentication Details (for audit)
+    password_hash = models.CharField(
+        max_length=128,
+        default='',
+        blank=True,
+        help_text="Hash of password used to authenticate (for audit purposes)"
+    )
+    ip_address = models.GenericIPAddressField(
+        null=True,
+        blank=True,
+        help_text="IP address from which signature was applied"
+    )
+    user_agent = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="Browser/client user agent"
+    )
+    
+    # Data Integrity
+    data_hash = models.CharField(
+        max_length=64,
+        default='',
+        blank=True,
+        help_text="SHA-256 hash of the signed data at the time of signing"
+    )
+    signature_hash = models.CharField(
+        max_length=64,
+        default='',
+        blank=True,
+        editable=False,
+        help_text="Hash of the signature itself (for integrity verification)"
+    )
+    
+    # Validation
+    is_valid = models.BooleanField(
+        default=True,
+        help_text="Whether this signature is still valid"
+    )
+    invalidated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this signature was invalidated"
+    )
+    invalidated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='signatures_invalidated',
+        help_text="User who invalidated this signature"
+    )
+    invalidation_reason = models.TextField(
+        blank=True,
+        help_text="Reason for invalidation"
+    )
+    
+    class Meta:
+        verbose_name = "Electronic Signature"
+        verbose_name_plural = "Electronic Signatures"
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['content_type', 'object_id']),
+            models.Index(fields=['user', '-timestamp']),
+            models.Index(fields=['is_valid']),
+        ]
+    
+    def __str__(self):
+        return f"{self.get_meaning_display()} - {self.user.get_full_name()} - {self.object_str}"
+    
+    def save(self, *args, **kwargs):
+        """Generate signature hash on save"""
+        if not self.signature_hash:
+            # Create a hash of all signature components for integrity
+            import json
+            signature_data = {
+                'user_id': self.user.id,
+                'action': self.action,
+                'meaning': self.meaning,
+                'timestamp': self.timestamp.isoformat() if self.timestamp else timezone.now().isoformat(),
+                'content_type': self.content_type,
+                'object_id': self.object_id,
+                'reason': self.reason,
+                'data_hash': self.data_hash
+            }
+            signature_string = json.dumps(signature_data, sort_keys=True)
+            self.signature_hash = hashlib.sha256(signature_string.encode()).hexdigest()
+        
+        super().save(*args, **kwargs)
+    
+    def verify_integrity(self) -> bool:
+        """
+        Verify the integrity of this signature
+        Returns True if signature is intact, False otherwise
+        """
+        import json
+        signature_data = {
+            'user_id': self.user.id,
+            'action': self.action,
+            'meaning': self.meaning,
+            'timestamp': self.timestamp.isoformat(),
+            'content_type': self.content_type,
+            'object_id': self.object_id,
+            'reason': self.reason,
+            'data_hash': self.data_hash
+        }
+        signature_string = json.dumps(signature_data, sort_keys=True)
+        calculated_hash = hashlib.sha256(signature_string.encode()).hexdigest()
+        
+        return calculated_hash == self.signature_hash
+    
+    def invalidate(self, user: User, reason: str):
+        """Invalidate this signature"""
+        self.is_valid = False
+        self.invalidated_at = timezone.now()
+        self.invalidated_by = user
+        self.invalidation_reason = reason
+        self.save()
